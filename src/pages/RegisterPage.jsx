@@ -66,9 +66,18 @@ const RegisterPage = () => {
       newErrors.email = '请输入有效的邮箱地址';
     }
 
-    // 手机号验证（可选）
-    if (formData.phone && !/^1[3-9]\d{9}$/.test(formData.phone)) {
+    // 手机号验证（必填）
+    if (!formData.phone.trim()) {
+      newErrors.phone = '请输入手机号码';
+    } else if (!/^1[3-9]\d{9}$/.test(formData.phone)) {
       newErrors.phone = '请输入有效的手机号码';
+    }
+
+    // 真实姓名验证（必填）
+    if (!formData.realName.trim()) {
+      newErrors.realName = '请输入真实姓名';
+    } else if (formData.realName.length < 2) {
+      newErrors.realName = '真实姓名至少需要2个字符';
     }
 
     setErrors(newErrors);
@@ -103,20 +112,18 @@ const RegisterPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      <div className="sm:mx-auto sm:w-full sm:max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-md w-full space-y-8">
         <div className="text-center">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">
             创建账户
           </h1>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-lg">
             加入体育活动室，发现更多精彩活动
           </p>
         </div>
-      </div>
 
-      <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-        <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+        <div className="bg-white rounded-xl shadow-lg p-8">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* 通用错误信息 */}
             {errors.general && (
@@ -151,7 +158,7 @@ const RegisterPage = () => {
             {/* 真实姓名输入 */}
             <div>
               <label htmlFor="realName" className="block text-sm font-medium text-gray-700">
-                真实姓名
+                真实姓名 *
               </label>
               <div className="mt-1">
                 <input
@@ -160,9 +167,14 @@ const RegisterPage = () => {
                   type="text"
                   value={formData.realName}
                   onChange={handleChange}
-                  className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="请输入真实姓名（可选）"
+                  className={`appearance-none block w-full px-3 py-2 border ${
+                    errors.realName ? 'border-red-300' : 'border-gray-300'
+                  } rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
+                  placeholder="请输入真实姓名"
                 />
+                {errors.realName && (
+                  <p className="mt-1 text-sm text-red-600">{errors.realName}</p>
+                )}
               </div>
             </div>
 
@@ -192,7 +204,7 @@ const RegisterPage = () => {
             {/* 手机号输入 */}
             <div>
               <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                手机号码
+                手机号码 *
               </label>
               <div className="mt-1">
                 <input
@@ -204,7 +216,7 @@ const RegisterPage = () => {
                   className={`appearance-none block w-full px-3 py-2 border ${
                     errors.phone ? 'border-red-300' : 'border-gray-300'
                   } rounded-md placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500`}
-                  placeholder="请输入手机号码（可选）"
+                  placeholder="请输入手机号码"
                 />
                 {errors.phone && (
                   <p className="mt-1 text-sm text-red-600">{errors.phone}</p>
@@ -275,7 +287,7 @@ const RegisterPage = () => {
           </form>
 
           {/* 登录链接 */}
-          <div className="mt-6">
+          <div className="mt-8">
             <div className="relative">
               <div className="absolute inset-0 flex items-center">
                 <div className="w-full border-t border-gray-300" />

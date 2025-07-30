@@ -6,6 +6,13 @@ import Footer from './components/Footer'
 import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import RegisterPage from './pages/RegisterPage'
+import ActivityListPage from './pages/ActivityListPage'
+import ActivityDetailPage from './pages/ActivityDetailPage'
+import CreateActivityPage from './pages/CreateActivityPage'
+import MyRegistrationsPage from './pages/MyRegistrationsPage'
+import MyActivitiesPage from './pages/MyActivitiesPage'
+import MyOrdersPage from './pages/MyOrdersPage'
+import ProfilePage from './pages/ProfilePage'
 import './App.css'
 
 /**
@@ -22,14 +29,13 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            {/* TODO: 添加更多路由 */}
-            {/* <Route path="/activities" element={<ActivityListPage />} />
+            <Route path="/activities" element={<ActivityListPage />} />
             <Route path="/activities/:id" element={<ActivityDetailPage />} />
             <Route path="/activities/create" element={<CreateActivityPage />} />
             <Route path="/my/registrations" element={<MyRegistrationsPage />} />
             <Route path="/my/activities" element={<MyActivitiesPage />} />
             <Route path="/my/orders" element={<MyOrdersPage />} />
-            <Route path="/profile" element={<ProfilePage />} /> */}
+            <Route path="/profile" element={<ProfilePage />} />
           </Routes>
         </main>
         <Footer />

@@ -15,9 +15,9 @@ import './App.css'
 function App() {
   return (
     <UserProvider>
-      <div className="min-h-screen flex flex-col">
+      <div className="min-h-screen w-full flex flex-col">
         <Header />
-        <main className="flex-grow">
+        <main className="flex-grow w-full">
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />

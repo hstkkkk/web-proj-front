@@ -39,7 +39,7 @@ const HomePage = () => {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen w-full">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-600 to-blue-800 text-white py-20">
         <div className="container mx-auto px-4 text-center">

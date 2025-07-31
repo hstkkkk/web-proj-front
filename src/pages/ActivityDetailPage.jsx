@@ -72,7 +72,7 @@ const ActivityDetailPage = () => {
   const fetchActivityDetail = useCallback(async () => {
     console.log('正在获取活动详情, ID:', id);
     try {
-      const response = await activityAPI.getActivityDetail(id);
+      const response = await activityAPI.getActivityDetail(parseInt(id));
       console.log('活动详情响应:', response);
       if (response.success) {
         setActivity(response.data);
@@ -88,9 +88,9 @@ const ActivityDetailPage = () => {
 
   const fetchComments = useCallback(async () => {
     try {
-      const response = await commentAPI.getActivityComments(id);
+      const response = await commentAPI.getActivityComments(parseInt(id));
       if (response.success) {
-        setComments(response.data);
+        setComments(response.data || []);
       }
     } catch (error) {
       console.error('获取评论失败:', error);
@@ -101,10 +101,11 @@ const ActivityDetailPage = () => {
     if (!user) return;
     
     try {
-      const response = await registrationAPI.checkRegistration(id);
-      setIsRegistered(response.data.isRegistered);
+      const response = await registrationAPI.checkRegistration(parseInt(id));
+      setIsRegistered(response.data?.isRegistered || false);
     } catch (error) {
       console.error('检查报名状态失败:', error);
+      setIsRegistered(false);
     }
   }, [id, user]);
 
@@ -172,20 +173,29 @@ const ActivityDetailPage = () => {
       return;
     }
 
-    if (!newComment.trim()) return;
+    if (!newComment.trim()) {
+      alert('请输入评论内容');
+      return;
+    }
 
     try {
       setSubmittingComment(true);
       const response = await commentAPI.createComment({ 
-        activityId: id, 
-        content: newComment 
+        activityId: parseInt(id), 
+        content: newComment.trim(),
+        rating: 5 // 默认5星评分
       });
       if (response.success) {
         setNewComment('');
-        fetchComments();
+        alert('评论发表成功！');
+        // 刷新评论列表
+        await fetchComments();
+      } else {
+        alert(response.message || '评论发表失败');
       }
     } catch (error) {
       console.error('发表评论失败:', error);
+      alert('评论发表失败，请稍后重试');
     } finally {
       setSubmittingComment(false);
     }

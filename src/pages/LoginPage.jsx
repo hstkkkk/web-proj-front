@@ -76,7 +76,7 @@ const LoginPage = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             登录账户
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-700 text-lg">
             登录体育活动室，开始您的运动之旅
           </p>
         </div>
@@ -159,12 +159,12 @@ const LoginPage = () => {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">或</span>
+                <span className="px-2 bg-white text-gray-700">或</span>
               </div>
             </div>
 
             <div className="mt-6 text-center">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-700">
                 还没有账户？
                 <Link
                   to="/register"

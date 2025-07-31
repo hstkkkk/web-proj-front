@@ -129,7 +129,7 @@ const HomePage = () => {
               <h3 className="text-xl font-semibold mb-2 text-gray-600">
                 暂无活动
               </h3>
-              <p className="text-gray-500 mb-6">
+              <p className="text-gray-600 mb-6">
                 现在还没有活动，成为第一个创建活动的人吧！
               </p>
               <Link

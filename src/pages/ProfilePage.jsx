@@ -205,7 +205,7 @@ const ProfilePage = () => {
       <div className="bg-white shadow-sm">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <h1 className="text-3xl font-bold text-gray-900">个人资料</h1>
-          <p className="mt-2 text-gray-600">管理您的个人信息和账户设置</p>
+          <p className="mt-2 text-gray-700">管理您的个人信息和账户设置</p>
         </div>
       </div>
 
@@ -434,7 +434,7 @@ const ProfilePage = () => {
                 </button>
               </div>
               <h3 className="text-lg font-semibold text-gray-900">{user.realName || user.username}</h3>
-              <p className="text-gray-500 text-sm">@{user.username}</p>
+              <p className="text-gray-600 text-sm">@{user.username}</p>
             </div>
 
             {/* 账户统计 */}
@@ -476,7 +476,7 @@ const ProfilePage = () => {
                   <span className="text-gray-600">两步验证</span>
                   <span className="text-gray-400 font-medium">未开启</span>
                 </div>
-                <div className="text-xs text-gray-500 mt-4">
+                <div className="text-xs text-gray-600 mt-4">
                   最后登录：{new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
                 </div>
               </div>

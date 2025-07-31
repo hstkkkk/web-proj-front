@@ -374,7 +374,7 @@ const MyOrdersPage = () => {
                filter === 'cancelled' ? '暂无已取消订单' :
                '暂无已退款订单'}
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-600 mb-6">
               {filter === 'all' ? '快去参与付费活动生成订单吧！' : '试试切换其他筛选条件'}
             </p>
             {filter === 'all' && (

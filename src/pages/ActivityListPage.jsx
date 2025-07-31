@@ -83,19 +83,19 @@ const ActivityListPage = () => {
         <p className="text-gray-600 mb-4 line-clamp-2">{activity.description}</p>
         
         <div className="space-y-2 mb-4">
-          <div className="flex items-center text-sm text-gray-500">
+          <div className="flex items-center text-sm text-gray-600">
             <Calendar className="w-4 h-4 mr-2" />
             {new Date(activity.startTime).toLocaleString()}
           </div>
-          <div className="flex items-center text-sm text-gray-500">
+          <div className="flex items-center text-sm text-gray-600">
             <MapPin className="w-4 h-4 mr-2" />
             {activity.location}
           </div>
-          <div className="flex items-center text-sm text-gray-500">
+          <div className="flex items-center text-sm text-gray-600">
             <Users className="w-4 h-4 mr-2" />
             {activity.currentParticipants}/{activity.maxParticipants} 人
           </div>
-          <div className="flex items-center text-sm text-gray-500">
+          <div className="flex items-center text-sm text-gray-600">
             <Clock className="w-4 h-4 mr-2" />
             持续 {activity.duration} 小时
           </div>
@@ -106,7 +106,7 @@ const ActivityListPage = () => {
             <span className="text-2xl font-bold text-blue-600">
               ¥{activity.price || 0}
             </span>
-            {activity.price > 0 && <span className="text-gray-500 ml-1">/人</span>}
+            {activity.price > 0 && <span className="text-gray-600 ml-1">/人</span>}
           </div>
           <Link
             to={`/activities/${activity.id}`}
@@ -248,7 +248,7 @@ const ActivityListPage = () => {
           <div className="text-center py-12">
             <div className="text-gray-400 text-6xl mb-4">🏃</div>
             <h3 className="text-xl font-semibold text-gray-600 mb-2">暂无活动</h3>
-            <p className="text-gray-500">当前筛选条件下没有找到相关活动</p>
+            <p className="text-gray-600">当前筛选条件下没有找到相关活动</p>
           </div>
         )}
       </div>

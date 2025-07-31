@@ -277,7 +277,7 @@ const ActivityDetailPage = () => {
                 </div>
                 <div className="flex-1">
                   <h4 className="font-medium">{activity.creator?.realName || '活动创建者'}</h4>
-                  <p className="text-sm text-gray-500">@{activity.creator?.username}</p>
+                  <p className="text-sm text-gray-600">@{activity.creator?.username}</p>
                 </div>
                 <div className="flex space-x-2">
                   <button className="p-2 bg-gray-100 rounded-lg hover:bg-gray-200">
@@ -334,7 +334,7 @@ const ActivityDetailPage = () => {
                     <div className="flex-1">
                       <div className="flex items-center space-x-2 mb-1">
                         <span className="font-medium text-sm">{comment.user?.realName}</span>
-                        <span className="text-xs text-gray-500">
+                        <span className="text-xs text-gray-600">
                           {new Date(comment.createdAt).toLocaleString()}
                         </span>
                       </div>
@@ -344,7 +344,7 @@ const ActivityDetailPage = () => {
                 ))}
 
                 {comments.length === 0 && (
-                  <p className="text-gray-500 text-center py-8">暂无评论，快来发表第一条评论吧！</p>
+                  <p className="text-gray-600 text-center py-8">暂无评论，快来发表第一条评论吧！</p>
                 )}
               </div>
             </motion.div>
@@ -363,7 +363,7 @@ const ActivityDetailPage = () => {
                 <div className="text-3xl font-bold text-blue-600 mb-1">
                   ¥{activity.price || 0}
                 </div>
-                {activity.price > 0 && <div className="text-gray-500 text-sm">每人</div>}
+                {activity.price > 0 && <div className="text-gray-600 text-sm">每人</div>}
               </div>
 
               {activity.status === '报名中' ? (
@@ -394,7 +394,7 @@ const ActivityDetailPage = () => {
                 </button>
               )}
 
-              <div className="mt-4 text-center text-sm text-gray-500">
+              <div className="mt-4 text-center text-sm text-gray-600">
                 还有 {activity.maxParticipants - activity.currentParticipants} 个名额
               </div>
             </div>

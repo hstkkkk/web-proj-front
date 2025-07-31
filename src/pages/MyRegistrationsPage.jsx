@@ -295,7 +295,7 @@ const MyRegistrationsPage = () => {
                filter === 'past' ? '暂无已结束的活动' :
                '暂无已取消的报名'}
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-600 mb-6">
               {filter === 'all' ? '快去发现精彩的活动吧！' : '试试切换其他筛选条件'}
             </p>
             {filter === 'all' && (

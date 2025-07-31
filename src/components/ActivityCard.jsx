@@ -120,7 +120,7 @@ const ActivityCard = ({ activity }) => {
           
           <div className="flex items-center space-x-2">
             {isActivityStarted ? (
-              <span className="text-gray-500 text-xs">已开始</span>
+              <span className="text-gray-600 text-xs">已开始</span>
             ) : isActivityFull ? (
               <span className="text-red-500 text-xs">已满员</span>
             ) : (

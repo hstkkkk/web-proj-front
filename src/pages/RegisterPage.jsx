@@ -118,7 +118,7 @@ const RegisterPage = () => {
           <h1 className="text-4xl font-bold text-gray-900 mb-2">
             创建账户
           </h1>
-          <p className="text-gray-600 text-lg">
+          <p className="text-gray-700 text-lg">
             加入体育活动室，发现更多精彩活动
           </p>
         </div>
@@ -293,12 +293,12 @@ const RegisterPage = () => {
                 <div className="w-full border-t border-gray-300" />
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">或</span>
+                <span className="px-2 bg-white text-gray-700">或</span>
               </div>
             </div>
 
             <div className="mt-6 text-center">
-              <span className="text-sm text-gray-600">
+              <span className="text-sm text-gray-700">
                 已有账户？
                 <Link
                   to="/login"

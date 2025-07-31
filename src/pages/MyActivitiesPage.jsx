@@ -289,7 +289,7 @@ const MyActivitiesPage = () => {
                   <div className="mb-4">
                     <div className="flex justify-between items-center mb-2">
                       <span className="text-sm font-medium text-gray-600">参与进度</span>
-                      <span className="text-sm text-gray-500">
+                      <span className="text-sm text-gray-600">
                         {Math.round((activity.currentParticipants / activity.maxParticipants) * 100)}%
                       </span>
                     </div>
@@ -326,7 +326,7 @@ const MyActivitiesPage = () => {
                filter === 'ongoing' ? '暂无进行中的活动' :
                '暂无已结束的活动'}
             </h3>
-            <p className="text-gray-500 mb-6">
+            <p className="text-gray-600 mb-6">
               {filter === 'all' ? '创建您的第一个精彩活动吧！' : '试试切换其他筛选条件'}
             </p>
             {filter === 'all' && (

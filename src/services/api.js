@@ -68,7 +68,8 @@ export const activityAPI = {
   deleteActivity: (activityId) => api.delete(`/activities/${activityId}`),
   
   // 获取我创建的活动
-  getMyActivities: () => api.get('/activities/my/created'),
+  getMyCreatedActivities: () => api.get('/activities/my/created'),
+  getMyActivities: () => api.get('/activities/my/created'), // 保持向后兼容
 };
 
 // 报名相关API

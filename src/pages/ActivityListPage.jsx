@@ -81,10 +81,7 @@ const ActivityListPage = () => {
   };
 
   const ActivityCard = ({ activity }) => (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      whileHover={{ y: -5 }}
+    <div
       className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300"
     >
       <div className="h-48 bg-gradient-to-br from-blue-500 to-purple-600 relative">
@@ -145,7 +142,7 @@ const ActivityListPage = () => {
           </Link>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 
   return (

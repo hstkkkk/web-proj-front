@@ -384,7 +384,7 @@ const ActivityDetailPage = () => {
             className="space-y-6"
           >
             {/* 报名卡片 */}
-            <div className="bg-white rounded-xl shadow-lg p-6 sticky top-24">
+            <div className="bg-white rounded-xl shadow-lg p-6">
               <div className="text-center mb-6">
                 <div className="text-3xl font-bold text-blue-600 mb-1">
                   ¥{activity.price || 0}

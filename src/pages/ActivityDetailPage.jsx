@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { 
   Calendar, MapPin, Users, Clock, Star, Share2, 
   Heart, MessageCircle, User, Phone, Mail, ArrowLeft 
@@ -23,6 +22,34 @@ const ActivityDetailPage = () => {
   const [isRegistered, setIsRegistered] = useState(false);
   const [newComment, setNewComment] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
+
+  // 根据活动时间和状态计算显示状态
+  const getActivityDisplayStatus = (activity) => {
+    if (!activity) return '未知';
+    
+    const now = new Date();
+    const startTime = new Date(activity.startTime);
+    const endTime = new Date(activity.endTime);
+    
+    // 如果活动被取消
+    if (activity.status === 'cancelled') {
+      return '已取消';
+    }
+    
+    // 如果活动被标记为完成
+    if (activity.status === 'completed') {
+      return '已结束';
+    }
+    
+    // 根据时间判断状态
+    if (now < startTime) {
+      return '报名中';
+    } else if (now >= startTime && now <= endTime) {
+      return '进行中';
+    } else {
+      return '已结束';
+    }
+  };
 
   const fetchActivityDetail = useCallback(async () => {
     console.log('正在获取活动详情, ID:', id);
@@ -187,10 +214,7 @@ const ActivityDetailPage = () => {
           {/* 主要内容 */}
           <div className="lg:col-span-2 space-y-6">
             {/* 活动封面和基本信息 */}
-            <motion.div 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-white rounded-xl shadow-lg overflow-hidden"
+            <div className="bg-white rounded-xl shadow-lg overflow-hidden"
             >
               <div className="h-64 bg-gradient-to-br from-blue-500 to-purple-600 relative">
                 <div className="absolute inset-0 bg-black/20"></div>
@@ -201,11 +225,12 @@ const ActivityDetailPage = () => {
                 </div>
                 <div className="absolute top-6 right-6">
                   <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-                    activity.status === '报名中' ? 'bg-green-500 text-white' :
-                    activity.status === '进行中' ? 'bg-blue-500 text-white' :
+                    getActivityDisplayStatus(activity) === '报名中' ? 'bg-green-500 text-white' :
+                    getActivityDisplayStatus(activity) === '进行中' ? 'bg-blue-500 text-white' :
+                    getActivityDisplayStatus(activity) === '已取消' ? 'bg-red-500 text-white' :
                     'bg-gray-500 text-white'
                   }`}>
-                    {activity.status}
+                    {getActivityDisplayStatus(activity)}
                   </span>
                 </div>
                 <div className="absolute bottom-6 left-6 text-white">
@@ -268,13 +293,10 @@ const ActivityDetailPage = () => {
                   <p className="text-gray-600 leading-relaxed">{activity.description}</p>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* 创建者信息 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
+            <div
               className="bg-white rounded-xl shadow-lg p-6"
             >
               <h3 className="text-lg font-semibold mb-4">创建者信息</h3>
@@ -295,13 +317,10 @@ const ActivityDetailPage = () => {
                   </button>
                 </div>
               </div>
-            </motion.div>
+            </div>
 
             {/* 评论区 */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+            <div
               className="bg-white rounded-xl shadow-lg p-6"
             >
               <h3 className="text-lg font-semibold mb-4 flex items-center">
@@ -354,14 +373,11 @@ const ActivityDetailPage = () => {
                   <p className="text-gray-600 text-center py-8">暂无评论，快来发表第一条评论吧！</p>
                 )}
               </div>
-            </motion.div>
+            </div>
           </div>
 
           {/* 侧边栏 */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
+          <div
             className="space-y-6"
           >
             {/* 报名卡片 */}
@@ -373,7 +389,7 @@ const ActivityDetailPage = () => {
                 {activity.price > 0 && <div className="text-gray-600 text-sm">每人</div>}
               </div>
 
-              {activity.status === '报名中' ? (
+              {getActivityDisplayStatus(activity) === '报名中' ? (
                 isRegistered ? (
                   <button
                     onClick={handleCancelRegistration}
@@ -397,7 +413,8 @@ const ActivityDetailPage = () => {
                   disabled
                   className="w-full bg-gray-400 text-white py-3 rounded-lg cursor-not-allowed font-medium"
                 >
-                  {activity.status === '进行中' ? '活动进行中' : '活动已结束'}
+                  {getActivityDisplayStatus(activity) === '进行中' ? '活动进行中' : 
+                   getActivityDisplayStatus(activity) === '已取消' ? '活动已取消' : '活动已结束'}
                 </button>
               )}
 
@@ -417,7 +434,7 @@ const ActivityDetailPage = () => {
                 <li>• 恶劣天气活动可能会延期或取消</li>
               </ul>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </div>

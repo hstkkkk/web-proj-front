@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
 import { Search, Filter, Calendar, MapPin, Users, Clock } from 'lucide-react';
 import { activityAPI } from '../services/api';
 
@@ -19,11 +18,35 @@ const ActivityListPage = () => {
   const categories = ['足球', '篮球', '网球', '羽毛球', '乒乓球', '游泳', '跑步', '健身'];
   const statuses = ['报名中', '进行中', '已结束'];
 
-  useEffect(() => {
-    fetchActivities();
-  }, [currentPage, searchTerm, categoryFilter, statusFilter]);
+  // 根据活动时间和状态计算显示状态
+  const getActivityDisplayStatus = (activity) => {
+    if (!activity) return '未知';
+    
+    const now = new Date();
+    const startTime = new Date(activity.startTime);
+    const endTime = new Date(activity.endTime);
+    
+    // 如果活动被取消
+    if (activity.status === 'cancelled') {
+      return '已取消';
+    }
+    
+    // 如果活动被标记为完成
+    if (activity.status === 'completed') {
+      return '已结束';
+    }
+    
+    // 根据时间判断状态
+    if (now < startTime) {
+      return '报名中';
+    } else if (now >= startTime && now <= endTime) {
+      return '进行中';
+    } else {
+      return '已结束';
+    }
+  };
 
-  const fetchActivities = async () => {
+  const fetchActivities = useCallback(async () => {
     try {
       setLoading(true);
       const response = await activityAPI.getActivities({
@@ -45,7 +68,11 @@ const ActivityListPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentPage, searchTerm, categoryFilter, statusFilter]);
+
+  useEffect(() => {
+    fetchActivities();
+  }, [fetchActivities]);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -69,11 +96,11 @@ const ActivityListPage = () => {
         </div>
         <div className="absolute top-4 right-4">
           <span className={`px-3 py-1 rounded-full text-sm font-medium ${
-            activity.status === '报名中' ? 'bg-green-500 text-white' :
-            activity.status === '进行中' ? 'bg-blue-500 text-white' :
+            getActivityDisplayStatus(activity) === '报名中' ? 'bg-green-500 text-white' :
+            getActivityDisplayStatus(activity) === '进行中' ? 'bg-blue-500 text-white' :
             'bg-gray-500 text-white'
           }`}>
-            {activity.status}
+            {getActivityDisplayStatus(activity)}
           </span>
         </div>
         <div className="absolute bottom-4 left-4 text-white">

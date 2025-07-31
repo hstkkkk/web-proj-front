@@ -108,7 +108,10 @@ const ActivityDetailPage = () => {
 
     try {
       setRegistering(true);
-      const response = await registrationAPI.registerActivity(id);
+      const response = await registrationAPI.registerActivity({
+        activityId: parseInt(id),
+        notes: ''
+      });
       if (response.success) {
         setIsRegistered(true);
         // 刷新活动详情以获取最新的参与人数

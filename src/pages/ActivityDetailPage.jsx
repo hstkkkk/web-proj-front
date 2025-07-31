@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { 
   Calendar, MapPin, Users, Clock, Star, Share2, 
   Heart, MessageCircle, User, Phone, Mail, ArrowLeft 
 } from 'lucide-react';
-import { activityAPI, registrationAPI } from '../services/api';
+import { activityAPI, registrationAPI, commentAPI } from '../services/api';
 import { useUser } from '../contexts/UserContext';
 
 /**
@@ -24,6 +24,45 @@ const ActivityDetailPage = () => {
   const [newComment, setNewComment] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
 
+  const fetchActivityDetail = useCallback(async () => {
+    console.log('正在获取活动详情, ID:', id);
+    try {
+      const response = await activityAPI.getActivityDetail(id);
+      console.log('活动详情响应:', response);
+      if (response.success) {
+        setActivity(response.data);
+      } else {
+        console.error('获取活动详情失败:', response.message);
+      }
+    } catch (error) {
+      console.error('获取活动详情失败:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [id]);
+
+  const fetchComments = useCallback(async () => {
+    try {
+      const response = await commentAPI.getActivityComments(id);
+      if (response.success) {
+        setComments(response.data);
+      }
+    } catch (error) {
+      console.error('获取评论失败:', error);
+    }
+  }, [id]);
+
+  const checkRegistrationStatus = useCallback(async () => {
+    if (!user) return;
+    
+    try {
+      const response = await registrationAPI.checkRegistration(id);
+      setIsRegistered(response.data.isRegistered);
+    } catch (error) {
+      console.error('检查报名状态失败:', error);
+    }
+  }, [id, user]);
+
   useEffect(() => {
     if (id) {
       fetchActivityDetail();
@@ -32,42 +71,7 @@ const ActivityDetailPage = () => {
         checkRegistrationStatus();
       }
     }
-  }, [id, user]);
-
-  const fetchActivityDetail = async () => {
-    try {
-      const response = await activityAPI.getActivityById(id);
-      if (response.success) {
-        setActivity(response.data);
-      }
-    } catch (error) {
-      console.error('获取活动详情失败:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchComments = async () => {
-    try {
-      const response = await activityAPI.getActivityComments(id);
-      if (response.success) {
-        setComments(response.data);
-      }
-    } catch (error) {
-      console.error('获取评论失败:', error);
-    }
-  };
-
-  const checkRegistrationStatus = async () => {
-    try {
-      const response = await registrationAPI.checkRegistration(id);
-      if (response.success) {
-        setIsRegistered(response.data.isRegistered);
-      }
-    } catch (error) {
-      console.error('检查报名状态失败:', error);
-    }
-  };
+  }, [id, user, fetchActivityDetail, fetchComments, checkRegistrationStatus]);
 
   const handleRegister = async () => {
     if (!user) {
@@ -124,7 +128,10 @@ const ActivityDetailPage = () => {
 
     try {
       setSubmittingComment(true);
-      const response = await activityAPI.addComment(id, { content: newComment });
+      const response = await commentAPI.createComment({ 
+        activityId: id, 
+        content: newComment 
+      });
       if (response.success) {
         setNewComment('');
         fetchComments();

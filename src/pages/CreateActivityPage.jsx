@@ -103,8 +103,16 @@ const CreateActivityPage = () => {
 
     setLoading(true);
     try {
+      // 排除 duration 字段，因为后端不需要它
+      const { duration: _duration, ...submitData } = formData;
+      
+      // 如果 requirements 是空字符串，则不发送这个字段
+      if (!submitData.requirements || submitData.requirements.trim() === '') {
+        delete submitData.requirements;
+      }
+      
       const response = await activityAPI.createActivity({
-        ...formData,
+        ...submitData,
         maxParticipants: parseInt(formData.maxParticipants),
         price: parseFloat(formData.price) || 0,
       });
@@ -117,7 +125,19 @@ const CreateActivityPage = () => {
       }
     } catch (error) {
       console.error('创建活动失败:', error);
-      setErrors({ general: '创建活动失败，请稍后重试' });
+      
+      // 显示更详细的错误信息
+      let errorMessage = '创建活动失败，请稍后重试';
+      
+      if (error.response?.status === 401) {
+        errorMessage = '认证失败，请重新登录';
+      } else if (error.response?.status === 422) {
+        errorMessage = error.response.data?.message || '数据验证失败';
+      } else if (error.response?.data?.message) {
+        errorMessage = error.response.data.message;
+      }
+      
+      setErrors({ general: errorMessage });
     } finally {
       setLoading(false);
     }
@@ -128,12 +148,12 @@ const CreateActivityPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-3xl w-full space-y-8">
         {/* 页面标题 */}
-        <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">创建活动</h1>
-          <p className="text-gray-600">创建一个精彩的体育活动，邀请更多人参与</p>
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">创建活动</h1>
+          <p className="text-gray-700 text-lg">创建一个精彩的体育活动，邀请更多人参与</p>
         </div>
 
         <div className="bg-white rounded-xl shadow-lg p-8">

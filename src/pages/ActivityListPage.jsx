@@ -35,8 +35,10 @@ const ActivityListPage = () => {
       });
 
       if (response.success) {
-        setActivities(response.data.activities);
-        setTotalPages(response.data.totalPages);
+        setActivities(response.data || []);
+        // 计算总页数
+        const totalPages = Math.ceil((response.total || 0) / 12);
+        setTotalPages(totalPages);
       }
     } catch (error) {
       console.error('获取活动列表失败:', error);

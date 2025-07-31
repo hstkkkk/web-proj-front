@@ -107,36 +107,33 @@ const MyActivitiesPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* 页面标题 */}
-      <div className="bg-white shadow-sm">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex justify-between items-center">
-            <div>
-              <h1 className="text-3xl font-bold text-gray-900">我的活动</h1>
-              <p className="mt-2 text-gray-600">管理您创建的体育活动</p>
-            </div>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-4xl w-full space-y-8">
+        {/* 页面标题 */}
+        <div className="text-center">
+          <h1 className="text-4xl font-bold text-gray-900 mb-2">我的活动</h1>
+          <p className="text-gray-700 text-lg">管理您创建的体育活动</p>
+          <div className="mt-6">
             <Link
               to="/activities/create"
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 flex items-center"
+              className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors duration-200 inline-flex items-center"
             >
               <Plus className="w-5 h-5 mr-2" />
               创建活动
             </Link>
           </div>
         </div>
-      </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="bg-white rounded-xl shadow-lg p-8">
         {/* 筛选器 */}
-        <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <div className="mb-8">
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setFilter('all')}
               className={`px-4 py-2 rounded-lg font-medium transition-colors duration-200 ${
                 filter === 'all'
                   ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
               }`}
             >
               全部活动 ({activities.length})
@@ -340,6 +337,7 @@ const MyActivitiesPage = () => {
             )}
           </div>
         )}
+        </div>
       </div>
     </div>
   );

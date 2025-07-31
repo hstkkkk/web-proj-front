@@ -56,8 +56,10 @@ export const UserProvider = ({ children }) => {
       
       if (response.success) {
         const userData = response.data;
+        // 保存用户数据和token
         localStorage.setItem('user', JSON.stringify(userData));
         localStorage.setItem('userId', userData.id);
+        localStorage.setItem('token', userData.token);
         dispatch({ type: 'SET_USER', payload: userData });
         return { success: true, data: userData };
       } else {

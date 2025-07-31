@@ -23,6 +23,24 @@ const ActivityDetailPage = () => {
   const [newComment, setNewComment] = useState('');
   const [submittingComment, setSubmittingComment] = useState(false);
 
+  // 分类名称标准化函数 - 将英文转为中文显示
+  const getCategoryDisplayName = (category) => {
+    const categoryMap = {
+      'football': '足球',
+      'basketball': '篮球',
+      'tennis': '网球',
+      'badminton': '羽毛球',
+      'table tennis': '乒乓球',
+      'ping pong': '乒乓球',
+      'swimming': '游泳',
+      'running': '跑步',
+      'fitness': '健身',
+      'gym': '健身'
+    };
+    
+    return categoryMap[category?.toLowerCase()] || category;
+  };
+
   // 根据活动时间和状态计算显示状态
   const getActivityDisplayStatus = (activity) => {
     if (!activity) return '未知';
@@ -223,7 +241,7 @@ const ActivityDetailPage = () => {
                 <div className="absolute inset-0 bg-black/20"></div>
                 <div className="absolute top-6 left-6">
                   <span className="bg-white/90 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
-                    {activity.category}
+                    {getCategoryDisplayName(activity.category)}
                   </span>
                 </div>
                 <div className="absolute top-6 right-6">

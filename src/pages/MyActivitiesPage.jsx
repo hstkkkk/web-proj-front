@@ -16,6 +16,24 @@ const MyActivitiesPage = () => {
   const [filter, setFilter] = useState('all'); // all, upcoming, ongoing, past
   const [deletingId, setDeletingId] = useState(null);
 
+  // 分类名称标准化函数 - 将英文转为中文显示
+  const getCategoryDisplayName = (category) => {
+    const categoryMap = {
+      'football': '足球',
+      'basketball': '篮球',
+      'tennis': '网球',
+      'badminton': '羽毛球',
+      'table tennis': '乒乓球',
+      'ping pong': '乒乓球',
+      'swimming': '游泳',
+      'running': '跑步',
+      'fitness': '健身',
+      'gym': '健身'
+    };
+    
+    return categoryMap[category?.toLowerCase()] || category;
+  };
+
   useEffect(() => {
     if (!user) {
       navigate('/login');
@@ -206,7 +224,7 @@ const MyActivitiesPage = () => {
                           {status}
                         </span>
                         <span className="bg-blue-100 text-blue-800 px-2 py-1 rounded-full text-xs font-medium">
-                          {activity.category}
+                          {getCategoryDisplayName(activity.category)}
                         </span>
                       </div>
                       <p className="text-gray-600 mb-4 line-clamp-2">

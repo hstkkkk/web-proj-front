@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
  */
 const MyRegistrationsPage = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, loading: userLoading } = useUser();
   
   const [registrations, setRegistrations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,12 +35,15 @@ const MyRegistrationsPage = () => {
   };
 
   useEffect(() => {
+    // 等待UserContext加载完成
+    if (userLoading) return;
+    
     if (!user) {
       navigate('/login');
       return;
     }
     fetchRegistrations();
-  }, [user, navigate]);
+  }, [user, userLoading, navigate]);
 
   const fetchRegistrations = async () => {
     try {

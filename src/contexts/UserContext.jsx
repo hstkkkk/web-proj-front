@@ -120,21 +120,41 @@ export const UserProvider = ({ children }) => {
     }
   };
 
-  // 初始化时检查本地存储的用户信息
-  useEffect(() => {
+  // 验证当前用户token是否有效
+  const validateToken = async () => {
+    const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
-    if (storedUser) {
-      try {
-        const userData = JSON.parse(storedUser);
-        dispatch({ type: 'SET_USER', payload: userData });
-      } catch (error) {
-        console.error('解析用户数据失败:', error);
-        localStorage.removeItem('user');
-        dispatch({ type: 'SET_LOADING', payload: false });
-      }
-    } else {
+    
+    console.log('验证Token - token存在:', !!token);
+    console.log('验证Token - user存在:', !!storedUser);
+    
+    if (!token || !storedUser) {
+      console.log('Token或用户数据不存在，设置为未登录状态');
+      dispatch({ type: 'SET_LOADING', payload: false });
+      return;
+    }
+
+    try {
+      // 解析存储的用户数据
+      const userData = JSON.parse(storedUser);
+      console.log('解析用户数据成功:', userData);
+      
+      // 先直接恢复用户状态，让真实的API调用来验证token有效性
+      dispatch({ type: 'SET_USER', payload: userData });
+      
+    } catch (error) {
+      // 用户数据格式错误，清除本地数据
+      console.error('用户数据解析失败:', error);
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
       dispatch({ type: 'SET_LOADING', payload: false });
     }
+  };
+
+  // 初始化时检查本地存储的用户信息并验证token
+  useEffect(() => {
+    validateToken();
   }, []);
 
   const value = {

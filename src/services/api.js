@@ -31,6 +31,16 @@ api.interceptors.response.use(
   },
   (error) => {
     console.error('API请求错误:', error);
+    
+    // 处理401错误 - token过期或无效
+    if (error.response && error.response.status === 401) {
+      console.log('收到401错误，清除认证信息');
+      // 清除本地存储的认证信息
+      localStorage.removeItem('user');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('token');
+    }
+    
     return Promise.reject(error);
   }
 );
@@ -80,6 +90,9 @@ export const registrationAPI = {
   // 取消报名
   cancelRegistration: (activityId) => api.delete(`/registrations/activity/${activityId}`),
   
+  // 通过报名ID取消报名
+  cancelRegistrationById: (registrationId) => api.delete(`/registrations/${registrationId}`),
+  
   // 获取我的报名记录
   getMyRegistrations: () => api.get('/registrations/my'),
   
@@ -124,6 +137,9 @@ export const orderAPI = {
   
   // 取消订单
   cancelOrder: (orderNumber) => api.put(`/orders/${orderNumber}/cancel`),
+  
+  // 申请退款
+  refundOrder: (orderNumber) => api.put(`/orders/${orderNumber}/refund`),
   
   // 获取订单统计
   getOrderStats: () => api.get('/orders/stats/my'),

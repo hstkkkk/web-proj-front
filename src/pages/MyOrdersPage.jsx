@@ -9,24 +9,27 @@ import { useUser } from '../contexts/UserContext';
  */
 const MyOrdersPage = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, loading } = useUser();
   
   const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [ordersLoading, setOrdersLoading] = useState(true);
   const [filter, setFilter] = useState('all'); // all, pending, paid, cancelled, refunded
   const [processingId, setProcessingId] = useState(null);
 
   useEffect(() => {
+    // 等待UserContext加载完成
+    if (loading) return;
+    
     if (!user) {
       navigate('/login');
       return;
     }
     fetchOrders();
-  }, [user, navigate]);
+  }, [user, loading, navigate]);
 
   const fetchOrders = async () => {
     try {
-      setLoading(true);
+      setOrdersLoading(true);
       const response = await orderAPI.getMyOrders();
       if (response.success) {
         setOrders(response.data);
@@ -34,14 +37,14 @@ const MyOrdersPage = () => {
     } catch (error) {
       console.error('获取订单列表失败:', error);
     } finally {
-      setLoading(false);
+      setOrdersLoading(false);
     }
   };
 
-  const handlePayOrder = async (orderId) => {
+  const handlePayOrder = async (orderNumber) => {
     try {
-      setProcessingId(orderId);
-      const response = await orderAPI.payOrder(orderId);
+      setProcessingId(orderNumber);
+      const response = await orderAPI.payOrder(orderNumber);
       if (response.success) {
         fetchOrders();
         alert('支付成功！');
@@ -56,14 +59,14 @@ const MyOrdersPage = () => {
     }
   };
 
-  const handleCancelOrder = async (orderId) => {
+  const handleCancelOrder = async (orderNumber) => {
     if (!confirm('确定要取消这个订单吗？')) {
       return;
     }
 
     try {
-      setProcessingId(orderId);
-      const response = await orderAPI.cancelOrder(orderId);
+      setProcessingId(orderNumber);
+      const response = await orderAPI.cancelOrder(orderNumber);
       if (response.success) {
         fetchOrders();
         alert('订单取消成功！');
@@ -78,14 +81,14 @@ const MyOrdersPage = () => {
     }
   };
 
-  const handleRefundOrder = async (orderId) => {
+  const handleRefundOrder = async (orderNumber) => {
     if (!confirm('确定要申请退款吗？')) {
       return;
     }
 
     try {
-      setProcessingId(orderId);
-      const response = await orderAPI.refundOrder(orderId);
+      setProcessingId(orderNumber);
+      const response = await orderAPI.refundOrder(orderNumber);
       if (response.success) {
         fetchOrders();
         alert('退款申请提交成功！');
@@ -206,7 +209,7 @@ const MyOrdersPage = () => {
         </div>
 
         {/* 订单列表 */}
-        {loading ? (
+        {loading || ordersLoading ? (
           <div className="space-y-4">
             {[...Array(3)].map((_, index) => (
               <div key={index} className="bg-white rounded-xl shadow-sm p-6 animate-pulse">
@@ -258,15 +261,15 @@ const MyOrdersPage = () => {
                     {order.status === 'pending' && (
                       <>
                         <button
-                          onClick={() => handlePayOrder(order.id)}
-                          disabled={processingId === order.id}
+                          onClick={() => handlePayOrder(order.orderNumber)}
+                          disabled={processingId === order.orderNumber}
                           className="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors duration-200 disabled:opacity-50 text-sm"
                         >
-                          {processingId === order.id ? '支付中...' : '立即支付'}
+                          {processingId === order.orderNumber ? '支付中...' : '立即支付'}
                         </button>
                         <button
-                          onClick={() => handleCancelOrder(order.id)}
-                          disabled={processingId === order.id}
+                          onClick={() => handleCancelOrder(order.orderNumber)}
+                          disabled={processingId === order.orderNumber}
                           className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors duration-200 disabled:opacity-50 text-sm"
                         >
                           取消订单
@@ -277,11 +280,11 @@ const MyOrdersPage = () => {
                     {order.status === 'paid' && 
                      new Date(order.activity.startTime) > new Date() && (
                       <button
-                        onClick={() => handleRefundOrder(order.id)}
-                        disabled={processingId === order.id}
+                        onClick={() => handleRefundOrder(order.orderNumber)}
+                        disabled={processingId === order.orderNumber}
                         className="px-4 py-2 bg-orange-600 text-white rounded-lg hover:bg-orange-700 transition-colors duration-200 disabled:opacity-50 text-sm flex items-center"
                       >
-                        {processingId === order.id ? (
+                        {processingId === order.orderNumber ? (
                           <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></div>
                         ) : (
                           <RefreshCw className="w-4 h-4 mr-2" />

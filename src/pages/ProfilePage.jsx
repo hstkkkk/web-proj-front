@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
  */
 const ProfilePage = () => {
   const navigate = useNavigate();
-  const { user, updateUser } = useUser();
+  const { user, updateUser, loading: userLoading } = useUser();
   
   const [profileData, setProfileData] = useState({
     username: '',
@@ -30,6 +30,9 @@ const ProfilePage = () => {
   const [passwordErrors, setPasswordErrors] = useState({});
 
   useEffect(() => {
+    // 等待UserContext加载完成
+    if (userLoading) return;
+    
     if (!user) {
       navigate('/login');
       return;
@@ -41,7 +44,7 @@ const ProfilePage = () => {
       phone: user.phone || '',
       realName: user.realName || '',
     });
-  }, [user, navigate]);
+  }, [user, userLoading, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

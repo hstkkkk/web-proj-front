@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
  */
 const MyActivitiesPage = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, loading: userLoading } = useUser();
   
   const [activities, setActivities] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,12 +35,15 @@ const MyActivitiesPage = () => {
   };
 
   useEffect(() => {
+    // 等待UserContext加载完成
+    if (userLoading) return;
+    
     if (!user) {
       navigate('/login');
       return;
     }
     fetchMyActivities();
-  }, [user, navigate]);
+  }, [user, userLoading, navigate]);
 
   const fetchMyActivities = async () => {
     try {

@@ -9,7 +9,7 @@ import { useUser } from '../contexts/UserContext';
  */
 const CreateActivityPage = () => {
   const navigate = useNavigate();
-  const { user } = useUser();
+  const { user, loading: userLoading } = useUser();
   
   const [formData, setFormData] = useState({
     title: '',
@@ -30,10 +30,13 @@ const CreateActivityPage = () => {
   const categories = ['足球', '篮球', '网球', '羽毛球', '乒乓球', '游泳', '跑步', '健身'];
 
   React.useEffect(() => {
+    // 等待UserContext加载完成
+    if (userLoading) return;
+    
     if (!user) {
       navigate('/login');
     }
-  }, [user, navigate]);
+  }, [user, userLoading, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

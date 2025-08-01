@@ -4,7 +4,7 @@ import {
   Calendar, MapPin, Users, Clock, Star, Share2, 
   Heart, MessageCircle, User, Phone, Mail, ArrowLeft 
 } from 'lucide-react';
-import { activityAPI, registrationAPI, commentAPI } from '../services/api';
+import { activityAPI, registrationAPI, commentAPI, orderAPI } from '../services/api';
 import { useUser } from '../contexts/UserContext';
 
 /**
@@ -127,21 +127,38 @@ const ActivityDetailPage = () => {
 
     try {
       setRegistering(true);
-      const response = await registrationAPI.registerActivity({
-        activityId: parseInt(id),
-        notes: ''
-      });
-      if (response.success) {
-        setIsRegistered(true);
-        // 刷新活动详情以获取最新的参与人数
-        fetchActivityDetail();
-        alert('报名成功！');
+      
+      // 检查是否是付费活动
+      if (activity.price > 0) {
+        // 付费活动创建订单
+        const response = await orderAPI.createOrder({
+          activityId: parseInt(id),
+          notes: ''
+        });
+        if (response.success) {
+          alert(`订单创建成功！订单号：${response.data.orderNumber}，请前往"我的订单"页面完成支付。`);
+          // 不需要设置 isRegistered，因为需要支付后才算报名成功
+        } else {
+          alert(response.message || '创建订单失败');
+        }
       } else {
-        alert(response.message || '报名失败');
+        // 免费活动直接报名
+        const response = await registrationAPI.registerActivity({
+          activityId: parseInt(id),
+          notes: ''
+        });
+        if (response.success) {
+          setIsRegistered(true);
+          // 刷新活动详情以获取最新的参与人数
+          fetchActivityDetail();
+          alert('报名成功！');
+        } else {
+          alert(response.message || '报名失败');
+        }
       }
     } catch (error) {
-      console.error('报名失败:', error);
-      alert('报名失败，请稍后重试');
+      console.error('处理失败:', error);
+      alert('操作失败，请稍后重试');
     } finally {
       setRegistering(false);
     }
